@@ -22,7 +22,7 @@ class Tank{
         context.save();
         context.translate(this.x, this.y);
         context.rotate(this.rotate(mouseX, mouseY));
-        context.drawImage(this.sprite, 0, 0);
+        context.drawImage(this.sprite, -84, -80);
         context.restore();
     }
     move(direction){
@@ -60,12 +60,21 @@ class Tank{
     rotate(x1, y1){
         var c1= Math.abs(y1- this.y);
         var c2 = Math.sqrt((x1-this.x)*(x1-this.x) + (y1-this.y)*(y1-this.y))
-        if(x1 > this.x && y1 >this.y){  // truong hop goc phan tu thu 4
+        if(x1 >= this.x && y1 >= this.y){  // truong hop goc phan tu thu 4
             var res = Math.asin(c1/c2);
             return res;
         }
-        if(this.x > x1 && y1> this.y){
-            var res = Math.PI - Math.asin(c1/c2);;
+        if(this.x >= x1 && y1>= this.y){
+            var res = Math.PI - Math.asin(c1/c2);
+            return res;
+        }
+        if(this.x >= x1 && this.y>= y1 ){
+            var res = Math.PI + Math.asin(c1/c2);
+            return res;
+        }
+        if(this.x <= x1 && this.y>= y1 ){
+            var res = 2*Math.PI - Math.asin(c1/c2);
+            return res;
         }
 
     }
