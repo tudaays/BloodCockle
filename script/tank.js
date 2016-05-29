@@ -1,5 +1,5 @@
 /**
- * Created by khanh on 29/05/2016.aa
+ * Created by khanh on 29/05/2016
  */
 class Tank{
     constructor(x, y){
