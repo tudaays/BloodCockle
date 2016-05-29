@@ -3,6 +3,8 @@
  */
 class Creep{
     constructor(x, y, id){
+        this.hp = 0;
+        this.point = 0;
         this.x = x;
         this.y = y;
         this.id = id;

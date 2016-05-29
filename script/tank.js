@@ -91,7 +91,7 @@ class Tank{
 
     }
     shoot(){
-        var bullet = new Bullet(this.x + 30, this.y+30, this.degree, this.direction);
+        var bullet = new Bullet(this.x, this.y, this.degree, this.direction);
         this.bullets.push(bullet);
     }
 }

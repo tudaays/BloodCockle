@@ -13,29 +13,26 @@ class Bullet{
         this.direction = direction;
         this.reloadTime = 0;
         this.damage = 0;
-        switch (this.direction){
-            case 1: //up
-                this.speedY = -5/Math.tan(degree);
-                this.speedX = 5;
-                break;
-            case 2: //down
-                this.speedY = -5/Math.tan(degree);
-                this.speedX =-5;
-                break;
-            case 3: //left
-                this.speedY = 5/Math.tan(degree);
-                this.speedX = -5;
-                break;
-            case 4: //right
-                this.speedY = 5/Math.tan(degree);
-                this.speedX = 5;
-                break;
-        }
-
     }
     update(){
-        this.x+=this.speedX;
-        this.y+=this.speedY;
+        switch (this.direction){
+            case 1: //up
+                this.y -= 5/Math.tan(this.degree);
+                this.x += 5;
+                break;
+            case 2: //down
+                this.y -= 5/Math.tan(this.degree);
+                this.x -= 5;
+                break;
+            case 3: //left
+                this.y += 5/Math.tan(this.degree);
+                this.x -= 5;
+                break;
+            case 4: //right
+                this.y += 5/Math.tan(this.degree);
+                this.x += 5;
+                break;
+        }
     }
     draw(context){
         context.drawImage(this.sprite,this.x, this.y);
