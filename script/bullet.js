@@ -5,9 +5,9 @@ class Bullet{
     constructor(x, y, direction){
         this.x = x;
         this.y = y;
+        this.damage = 0;
         this.speedX = 0;
         this.speedY = 0;
-        this.damage = 0;
         this.reloadTime = 0;
         switch (direction){
             case 1: //up
