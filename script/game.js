@@ -2,12 +2,14 @@
  * Created by keldeo on 29/05/2016.
  */
 var context;
+var mouseX, mouseY;
 window.onload = function () {
     var canvas = document.createElement("canvas");
     document.body.appendChild(canvas);
     context = canvas.getContext("2d");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    document.body.addEventListener("mousemove", mouseMove, false);
     gameStart();
     setInterval(gameLoop, 17);
 };
@@ -31,6 +33,23 @@ function gameDrawer() {
     context.fillRect(0, 0, window.innerWidth, window.innerHeight);
     player.draw(context);
 }
+
+function mouseMove(e)
+{
+
+    if(e.offsetX) {
+        mouseX = e.offsetX;
+        mouseY = e.offsetY;
+    }
+    else if(e.layerX) {
+        mouseX = e.layerX;
+        mouseY = e.layerY;
+    }
+
+
+    /* do something with mouseX/mouseY */
+}
+
 window.onkeydown = function (e) {
     switch (e.keyCode){
         case 65://a
@@ -45,9 +64,9 @@ window.onkeydown = function (e) {
         case 87://w
             player.move(1);
             break;
-        // case 32: // dau cach
-        //     player.shot();
-        //     break;
+        case 32: // dau cach
+            player.shoot();
+            break;
     }
 };
 window.onkeyup = function (e) {
