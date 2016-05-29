@@ -21,6 +21,7 @@ class Bullet{
                 break;
             case 4: //right
                 this.speedX = 5;
+                break;
         }
 
     }
