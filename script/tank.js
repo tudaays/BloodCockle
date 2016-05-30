@@ -2,20 +2,22 @@
  * Created by khanh on 29/05/2016
  */
 class Tank{
-    constructor(x, y){
+    constructor(x, y, id){
         this.x = x;
         this.y = y;
         this.speedX = 0;
         this.speedY = 0;
         this.sprite = new Image();
-        this.spriteUp = new Image();
         this.sprite.src = 'img/Base_tank.png';
         this.level = 1; //chưa làm
-        this.reload = 30; // thoi gian delay cua bullet 30x17ms = ..
+        this.bulletSpeed = 4; // toc do bay cua dan
+        this.reload = 50; // thoi gian delay cua bullet 30x17ms = ..
         this.speedBullet = 0; // chưa làm
         this.bullets = new Array();
         this.degree = 0; // goc de xoay
         this.count = 0; // biến đếm số lần lặp của gameLoop để tính time delay đạn
+        this.id = id;
+        
     }
     update(){
         this.count ++; // mỗi lần lặp gameLoop tăng biến đếm
@@ -92,9 +94,27 @@ class Tank{
     }
     shoot(){
         if(this.count >= this.reload){ //nếu count lớn hơn or bằng time delay mới cho nạp đạn vào. Sau khi nạp đạn thì set count =0
-            var bullet = new Bullet(this.x -20, this.y, mouseX, mouseY);
+            var bullet = new Bullet(this.x -20, this.y, mouseX, mouseY, this.bulletSpeed);
             this.bullets.push(bullet);
             this.count =0;
         }
     }
+}
+class Enemy{
+    constructor(x, y, degree, bullets){
+        this.x = x;
+        this.y = y;
+        this.sprite = new Image();
+        this.sprite.src = 'img/Base_tank.png';
+        this.degree = degree;
+        this.bullets = bullets;
+    }
+    update(){
+        for(var i=0; i< this.bullets.length; i++) {
+            this.bullets[i].update();
+        }
+    }
+    draw(context){
+        context.drawImage(this.sprite, this.x, this.y);
+    }   
 }

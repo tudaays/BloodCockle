@@ -2,13 +2,15 @@
  * Created by kej on 29/05/2016.
  */
 class Bullet{
-    constructor(x, y, x1, y1){
+    constructor(x, y, x1, y1, bulletSpeed){
         this.x = x;
         this.y = y;
+        this.bulletSpeed = bulletSpeed;
         this.sprite = new Image();
         this.sprite.src = 'img/bullet.png';
-        this.speedX = (x1 - x)/10; //2 cái này đang lỗi em nghiên cứu sau
-        this.speedY = (y1 - y)/10;
+        var ch = Math.sqrt((this.x -x1)*(this.x -x1) + (this.y -y1)*(this.y -y1));
+        this.speedX = (x1 - x)*this.bulletSpeed/ch; //2 cái này đang lỗi em nghiên cứu sau
+        this.speedY = (y1 - y)*this.bulletSpeed/ch;
         this.damage = 0;
     }
     update(){
