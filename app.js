@@ -12,3 +12,35 @@ app.get('/', function (req, res) {
 http.listen(3000, function () {
    console.log('server is now open  on 3000');
 });
+
+var tanks = [];
+var id = 0;
+io.on('connection', function(socket){
+    socket.on('player_created', function (data) {
+        socket.emit('info_other_players',{id:id, tanks:tanks});
+        socket.broadcast.emit('new_player_connected',{id:id, x:data.x, y:data.y});
+        tanks.push({id:id, x:data.x, y:data.y});
+        id++;
+    });
+    socket.on('player_update', function (data) {
+        for(var i=0; i< tanks.length; i++ ){
+            if(tanks[i].id == data.id){
+                tanks[i].x = data.x;
+                tanks[i].y = data.y;
+                tanks[i].degree = data.degree;
+                socket.broadcast.emit('enemy_update',data);
+                break;
+            }
+        }
+    });
+    socket.on('player_shoot', function (data) {
+        for(var i=0; i< tanks.length; i++ ) {
+            if (tanks[i].id == data.id) {
+                tanks[i].bullets = data.bullets;
+                socket.broadcast.emit('enemy_bullet', data);
+                break;
+
+            }
+        }
+    });
+});

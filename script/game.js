@@ -27,24 +27,37 @@ function initSocketClient() {
     socket.emit('player_created',{x: player.x, y:player.y});
     socket.on('info_other_players',function (data) {
         player.id = data.id;
-        //console.log(player.id);
         for (var i = 0; i < data.tanks.length; i++){
-            var newTank = new Tank(data.tanks[i].x,data.tanks[i].y, data.tanks[i].id);
-            enemyTanks.push(newTank);
+            var newTank = new Enemy(data.tanks[i].x,data.tanks[i].y, data.tanks[i].id, data.tanks[i].degree);
+            enemy.push(newTank);
         }
     });
     socket.on('new_player_connected', function (data) {
-        var newTank = new Tank(data.x,data.y, data.id);
-        enemyTanks.push(newTank);
+        var newTank = new Enemy(data.x,data.y, data.id);
+        enemy.push(newTank);
     });
 
     socket.on('enemy_update',function (data) {
-        for(var i = 0; i< enemyTanks.length; i++ ){
-            if(enemyTanks[i].id == data.id){
-                enemyTanks[i].direction = data.direction;
-                console.log(data.direction);
-                enemyTanks[i].x = data.x;
-                enemyTanks[i].y = data.y;
+        for(var i = 0; i< enemy.length; i++ ){
+            if(enemy[i].id == data.id){
+                enemy[i].x = data.x;
+                enemy[i].y = data.y;
+                enemy[i].degree = data.degree;
+                break;
+            }
+        }
+    });
+    socket.on('enemy_bullet', function (data) {
+        for(var i = 0; i< enemy.length; i++ ) {
+            if (enemy[i].id == data.id) {
+                console.log(data);
+                for(var j=0; j<data.bullets.length; j++){
+                    var bullet = new Bullet(data.bubbles[j].x, data.bubbles[j].y, 0, 0, 0);
+                    bullet.speedX = data.bubbles[j].speedX;
+                    bullet.speedY = data.bubbles[j].speedY;
+                    enemy[i].bullets.push(bullet);
+                    console.log(bullet);
+                }
                 break;
             }
         }
@@ -61,11 +74,18 @@ function gameStart() {
 
 function gameUpdate() {
     player.update();
+    socket.emit('player_update',{x: player.x, y: player.y, id: player.id, degree: player.degree});
+    for(var i=0; i< enemy.length; i++){
+        enemy[i].update();
+    }
 }
 function gameDrawer() {
     context.fillStyle = "white";
     context.fillRect(0, 0, window.innerWidth, window.innerHeight);
     player.draw(context);
+    for(var i=0; i< enemy.length; i++){
+        enemy[i].draw(context);
+    }
 }
 
 function mouseMove(e)

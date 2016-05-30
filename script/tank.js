@@ -96,25 +96,36 @@ class Tank{
         if(this.count >= this.reload){ //nếu count lớn hơn or bằng time delay mới cho nạp đạn vào. Sau khi nạp đạn thì set count =0
             var bullet = new Bullet(this.x -20, this.y, mouseX, mouseY, this.bulletSpeed);
             this.bullets.push(bullet);
+            socket.emit('player_shoot', {id: this.id, bullets: this.bullets});
             this.count =0;
         }
     }
 }
 class Enemy{
-    constructor(x, y, degree, bullets){
+    constructor(x, y, id, degree){
         this.x = x;
         this.y = y;
         this.sprite = new Image();
         this.sprite.src = 'img/Base_tank.png';
+        this.id = id;
         this.degree = degree;
-        this.bullets = bullets;
+        this.bullets = [];
+        this.bulletSpeed = 4;
     }
     update(){
-        for(var i=0; i< this.bullets.length; i++) {
+        for(var i=0; i<this.bullets.length; i++){
+            console.log(this.bullets[i]);
             this.bullets[i].update();
         }
     }
     draw(context){
-        context.drawImage(this.sprite, this.x, this.y);
-    }   
+        for(var i=0; i<this.bullets.length; i++){
+            this.bullets[i].draw(context);
+        }
+        context.save();
+        context.translate(this.x, this.y);
+        context.rotate(this.degree);
+        context.drawImage(this.sprite, -48, -48);
+        context.restore();
+    }
 }
