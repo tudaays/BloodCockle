@@ -11,8 +11,9 @@ class Tank{
         this.sprite.src = 'img/Base_tank.png';
         this.level = 1; //chưa làm
         this.bulletSpeed = 4; // toc do bay cua dan
+        this.hp = 50;
+        this. maxHp = 50;
         this.reload = 50; // thoi gian delay cua bullet 30x17ms = ..
-        this.speedBullet = 0; // chưa làm
         this.bullets = new Array();
         this.degree = 0; // goc de xoay
         this.count = 0; // biến đếm số lần lặp của gameLoop để tính time delay đạn
@@ -21,8 +22,12 @@ class Tank{
     }
     update(){
         this.count ++; // mỗi lần lặp gameLoop tăng biến đếm
-        for(var i=0; i< this.bullets.length; i++){ // update mảng các viên đạn
-            this.bullets[i].update();
+        for(var i=0; i< this.bullets.length; i++){
+            if(Math.abs(this.bullets.x - this.x) >=700 || Math.abs(this.bullets.y - this.y)>=500){
+                this.bullets.splice(i,1);
+            } else{
+                this.bullets[i].update();
+            }
         }
         this.x += this.speedX; //update tank
         this.y += this.speedY;
@@ -114,7 +119,6 @@ class Enemy{
     }
     update(){
         for(var i=0; i<this.bullets.length; i++){
-            console.log(this.bullets[i]);
             this.bullets[i].update();
         }
     }
