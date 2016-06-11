@@ -25,7 +25,7 @@ class Tank{
         this.count ++; // mỗi lần lặp gameLoop tăng biến đếm
         for(var i=0; i< this.bullets.length; i++){
             if(Math.abs(this.bullets[i].x - this.x) >=1200 || Math.abs(this.bullets[i].y - this.y)>=1200){
-                this.bullets[i].splice(i,1);
+                this.bullets.splice(i,1);
             } else{
                 this.bullets[i].update();
             }
@@ -34,6 +34,8 @@ class Tank{
         this.y += this.speedY;
     }
     draw(context){
+        context.fillStyle="#FF0000";
+        context.fillRect(this.x-25,this.y +50,(this.hp/this.maxHp)*50,10);
         for(var i=0; i< this.bullets.length; i++){
             this.bullets[i].draw(context);
         }
@@ -43,8 +45,7 @@ class Tank{
         context.translate(this.x, this.y);
         context.rotate(this.rotate(mouseX, mouseY));
         context.drawImage(this.sprite, -48, -48);
-        context.fillStyle="#FF0000";
-        context.fillRect(-48,-48 ,(this.hp/this.maxHp)*50,10);
+
         // context.fillText(this.name, this.x, this.y  + 80);
         context.restore();
     }

@@ -3,8 +3,8 @@
  */
 class Bullet{
     constructor(x, y, x1, y1, bulletSpeed){
-        this.x = x;
-        this.y = y;
+        this.x = x-10;
+        this.y = y-10;
         this.bulletSpeed = bulletSpeed;
         this.sprite = new Image();
         this.sprite.src = 'img/bullet.png';
