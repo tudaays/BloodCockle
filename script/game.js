@@ -14,30 +14,28 @@ window.onload = function () {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.addEventListener("mousemove", mouseMove, false);
-    login();
-    initSocketClient();
-    setInterval(gameLoop, 17);
 };
 
 function login() {
     var txtName = document.getElementById("txt_name").value;
-    console.log(txtName);
     player = new Tank(Math.floor((Math.random() * 300) + 20), Math.floor((Math.random() * 200)) + 20,0);
     player.name = txtName;
+    initSocketClient();
+    setInterval(gameLoop, 17);
 }
 
 function initSocketClient() {
     socket = io.connect();
-    socket.emit('player_created',{x: player.x, y:player.y, name: player.name});
+    socket.emit('player_created',{x: player.x, y:player.y, name: player.name, hp: player.hp});
     socket.on('info_other_players',function (data) {
         player.id = data.id;
         for (var i = 0; i < data.tanks.length; i++){
-            var newTank = new Enemy(data.tanks[i].x,data.tanks[i].y, data.tanks[i].id, data.tanks[i].degree, data.tanks[i].name);
+            var newTank = new Enemy(data.tanks[i].x,data.tanks[i].y, data.tanks[i].id, data.tanks[i].degree, data.tanks[i].name, data.tanks[i].hp);
             enemy.push(newTank);
         }
     });
     socket.on('new_player_connected', function (data) {
-        var newTank = new Enemy(data.x,data.y, data.id, 0, data.name);
+        var newTank = new Enemy(data.x,data.y, data.id, 0, data.name, data.hp);
         enemy.push(newTank);
     });
 
@@ -48,6 +46,7 @@ function initSocketClient() {
                 enemy[i].y = data.y;
                 enemy[i].degree = data.degree;
                 enemy[i].name = data.name;
+                enemy[i].hp = data.hp;
                 break;
             }
         }
