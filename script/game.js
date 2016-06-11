@@ -20,7 +20,7 @@ window.onload = function () {
 };
 
 function login() {
-    var txtName = document.getElementById("txt_name");
+    var txtName = document.getElementById("txt_name").innerHTML;
     console.log(txtName);
     player = new Tank(Math.floor((Math.random() * 300) + 20), Math.floor((Math.random() * 200)) + 20,0);
     player.name = txtName;

@@ -26,7 +26,6 @@ class Tank{
         for(var i=0; i< this.bullets.length; i++){
             if(Math.abs(this.bullets[i].x - this.x) >=1200 || Math.abs(this.bullets[i].y - this.y)>=1200){
                 this.bullets[i].splice(i,1);
-                console.log('xoa dan');
             } else{
                 this.bullets[i].update();
             }
@@ -40,12 +39,13 @@ class Tank{
         }
         //vẽ tank
         //mouseX mouseY là tọa độ của mouse
-        // console.log(this.name);
         context.save();
         context.translate(this.x, this.y);
         context.rotate(this.rotate(mouseX, mouseY));
         context.drawImage(this.sprite, -48, -48);
-        context.fillText(this.name, this.x, this.y  + 80);
+        context.fillStyle="#FF0000";
+        context.fillRect(-48,-48 ,(this.hp/this.maxHp)*50,10);
+        // context.fillText(this.name, this.x, this.y  + 80);
         context.restore();
     }
     move(direction){
