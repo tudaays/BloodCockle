@@ -36,6 +36,8 @@ class Tank{
     draw(context){
         context.fillStyle="#FF0000";
         context.fillRect(this.x-25,this.y +50,(this.hp/this.maxHp)*50,10);
+        context.fillStyle="#21BE16";
+        context.fillText(this.name, this.x-7 , this.y  + 80);
         for(var i=0; i< this.bullets.length; i++){
             this.bullets[i].draw(context);
         }
@@ -45,8 +47,6 @@ class Tank{
         context.translate(this.x, this.y);
         context.rotate(this.rotate(mouseX, mouseY));
         context.drawImage(this.sprite, -48, -48);
-
-        // context.fillText(this.name, this.x, this.y  + 80);
         context.restore();
     }
     move(direction){
@@ -112,7 +112,7 @@ class Tank{
     }
 }
 class Enemy{
-    constructor(x, y, id, degree){
+    constructor(x, y, id, degree, name){
         this.x = x;
         this.y = y;
         this.sprite = new Image();
@@ -121,6 +121,7 @@ class Enemy{
         this.degree = degree;
         this.bullets = [];
         this.bulletSpeed = 4;
+        this.name = name;
     }
     update(){
         for(var i=0; i<this.bullets.length; i++){
@@ -128,6 +129,10 @@ class Enemy{
         }
     }
     draw(context){
+        context.fillStyle="#FF0000";
+        context.fillRect(this.x-25,this.y +50,(this.hp/this.maxHp)*50,10);
+        context.fillStyle="#21BE16";
+        context.fillText(this.name, this.x -40, this.y  + 38);
         for(var i=0; i<this.bullets.length; i++){
             this.bullets[i].draw(context);
         }

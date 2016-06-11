@@ -18,7 +18,7 @@ var id = 0;
 io.on('connection', function(socket){
     socket.on('player_created', function (data) {
         socket.emit('info_other_players',{id:id, tanks:tanks});
-        socket.broadcast.emit('new_player_connected',{id:id, x:data.x, y:data.y});
+        socket.broadcast.emit('new_player_connected',data);
         tanks.push({id:id, x:data.x, y:data.y});
         id++;
     });
