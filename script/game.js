@@ -18,7 +18,7 @@ window.onload = function () {
 
 function login() {
     var txtName = document.getElementById("txt_name").value;
-    player = new Tank(Math.floor((Math.random() * 300) + 20), Math.floor((Math.random() * 200)) + 20,0);
+    player = new Tank(100,100,0);
     player.name = txtName;
     initSocketClient();
     setInterval(gameLoop, 17);
