@@ -47,6 +47,7 @@ function initSocketClient() {
                 enemy[i].x = data.x;
                 enemy[i].y = data.y;
                 enemy[i].degree = data.degree;
+                enemy[i].name = data.name;
                 break;
             }
         }
@@ -74,7 +75,7 @@ var gameLoop = function () {
 
 function gameUpdate() {
     player.update();
-    socket.emit('player_update',{x: player.x, y: player.y, id: player.id, degree: player.degree});
+    socket.emit('player_update',{x: player.x, y: player.y, id: player.id, degree: player.degree, name: player.name, hp: player.hp});
     for(var i=0; i< enemy.length; i++){
         enemy[i].update();
     }

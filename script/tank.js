@@ -112,7 +112,7 @@ class Tank{
     }
 }
 class Enemy{
-    constructor(x, y, id, degree, name){
+    constructor(x, y, id, degree, name, hp){
         this.x = x;
         this.y = y;
         this.sprite = new Image();
@@ -122,6 +122,8 @@ class Enemy{
         this.bullets = [];
         this.bulletSpeed = 4;
         this.name = name;
+        this.maxHp = 50;
+        this.hp = hp;
     }
     update(){
         for(var i=0; i<this.bullets.length; i++){
