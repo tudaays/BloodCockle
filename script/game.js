@@ -48,6 +48,7 @@ function initSocketClient() {
                 enemy[i].name = data.name;
                 enemy[i].hp = data.hp;
                 enemy[i].level = data.level;
+                enemy[i].exp = data.exp;
                 break;
             }
         }
@@ -68,6 +69,12 @@ function initSocketClient() {
     socket.on('get_shot', function (data) {
         if(player.id == data.id){
             player.hp = data.hp;
+            for(var i = 0; i< enemy.length; i++ ) {
+                if (enemy[i].id == data.idShooter) {
+                    enemy[i].bullets.splice( enemy[i].bullets[enemy[i].bullets.length-1],1);
+                }
+            }
+            // break;
         } else{
             for(var i = 0; i< enemy.length; i++ ) {
                 if (enemy[i].id == data.id) {
@@ -109,7 +116,7 @@ var gameLoop = function () {
 
 function gameUpdate() {
     player.update();
-    socket.emit('player_update',{x: player.x, y: player.y, id: player.id, degree: player.degree, name: player.name, hp: player.hp, level : player.level});
+    socket.emit('player_update',{x: player.x, y: player.y, id: player.id, degree: player.degree, name: player.name, hp: player.hp, level : player.level, exp: player.exp});
     for(var i=0; i< enemy.length; i++){
         enemy[i].update();
     }

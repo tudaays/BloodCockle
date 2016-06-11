@@ -20,7 +20,7 @@ io.on('connection', function(socket){
         socket.emit('info_other_players',{id:id, tanks:tanks});
         data.id = id;
         socket.broadcast.emit('new_player_connected',data);
-        tanks.push({id:id, x:data.x, y:data.y, name: data.name, hp: data.hp, level:1});
+        tanks.push({id:id, x:data.x, y:data.y, name: data.name, hp: data.hp, level:1, exp: 0});
         id++;
     });
     socket.on('player_update', function (data) {
@@ -32,6 +32,7 @@ io.on('connection', function(socket){
                 tanks[i].name = data.name;
                 tanks[i].hp = data.hp;
                 tanks[i].level = data.level;
+                tanks[i].exp = data.exp;
                 socket.broadcast.emit('enemy_update',data);
                 break;
             }
