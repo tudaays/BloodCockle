@@ -42,8 +42,24 @@ io.on('connection', function(socket){
                 tanks[i].bullets = data.bullets;
                 socket.broadcast.emit('enemy_bullet', data);
                 break;
-
             }
         }
     });
+    socket.on('enemy_get_shot', function (data) {
+        for(var i=0; i< tanks.length; i++ ) {
+            if (tanks[i].id == data.id) {
+                    tanks[i].hp = data.hp
+            }
+            socket.broadcast.emit('get_shot', data);
+            break;
+        }
+    });
+    socket.on('player_dead', function (data) {
+        for(var i=0; i< tanks.length; i++ ) {
+            if (tanks[i].id == data.id) {
+                tanks.splice(i, 1);
+                socket.broadcast.emit('enemy_dead',data);
+            }
+        }
+    })
 });

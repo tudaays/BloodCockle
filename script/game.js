@@ -64,6 +64,32 @@ function initSocketClient() {
             }
         }
     });
+    socket.on('get_shot', function (data) {
+        if(player.id == data.id){
+            player.hp = data.hp;
+        } else{
+            for(var i = 0; i< enemy.length; i++ ) {
+                if (enemy[i].id == data.id) {
+                    enemy[i].hp = data.hp;
+                    break;
+                }
+            }
+        }
+        console.log(data.idShooter);
+        for(var i = 0; i< enemy.length; i++ ) {
+            if (enemy[i].id == data.idShooter) {
+                enemy[i].bullets.splice( enemy[i].bullets[enemy[i].bullets.length-1],1);
+            }
+        }
+    });
+    socket.on('enemy_dead', function (data) {
+        for(var i = 0; i< enemy.length; i++ ) {
+            if (enemy[i].id == data.id) {;
+                enemy.splice(i,1);
+                break;
+            }
+        }
+    })
 }
 var gameLoop = function () {
     gameUpdate();

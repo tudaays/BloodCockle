@@ -19,9 +19,11 @@ class Tank{
         this.count = 0; // biến đếm số lần lặp của gameLoop để tính time delay đạn
         this.id = id;
         this.name;
-        
+        this.bulletDame = 10;
     }
     update(){
+        this.isDead();
+        this.shootEnemy();
         this.count ++; // mỗi lần lặp gameLoop tăng biến đếm
         for(var i=0; i< this.bullets.length; i++){
             if(Math.abs(this.bullets[i].x - this.x) >=1200 || Math.abs(this.bullets[i].y - this.y)>=1200){
@@ -42,7 +44,6 @@ class Tank{
         for(var i=0; i< this.bullets.length; i++){
             this.bullets[i].draw(context);
         }
-        //vẽ tank
         //mouseX mouseY là tọa độ của mouse
         context.save();
         context.translate(this.x, this.y);
@@ -57,22 +58,20 @@ class Tank{
             s1.height + s1.y > s2.y) return true;
         return false;
     }
-    // bulletKissBrick(){
-    //     for(var i = 0; i< this.bullets.length; i++){
-    //         var s1 = {x: this.bullets[i].x, y: this.bullets[i].y, width : 50, height: 50}
-    //         for(var j = 0; j< enemy.length; j++){
-    //             var s2 = {x: enemy[j].x, y: enemy[j].y, width : 80, height: 80}
-    //             if (this.compare(s1,s2)) {
-    //                 if(soundEfx.paused){
-    //                     soundEfx.src = 'sound/bullet_shot.ogg';
-    //                     soundEfx.play();
-    //                 }
-    //                 this.bullets.pop();
-    //                 wallBricks.splice(j,1);
-    //                 break;
-    //             }
-    //         }
-    //     }
+    shootEnemy() {
+        for (var i = 0; i < this.bullets.length; i++) {
+            var s1 = {x: this.bullets[i].x, y: this.bullets[i].y, width: 25, height: 25}
+            for (var j = 0; j < enemy.length; j++) {
+                var s2 = {x: enemy[j].x - 10, y: enemy[j].y - 20, width: 50, height: 50}
+                if (this.compare(s1, s2)) {
+                    this.bullets.splice(j, 1);
+                    enemy[j].hp -= this.bulletDame;
+                    socket.emit('enemy_get_shot', {idShooter: this.id, id: enemy[j].id, hp: enemy[j].hp});
+                    break;
+                }
+            }
+        }
+    }
     move(direction){
         switch (direction){
             case 1://up
@@ -134,6 +133,12 @@ class Tank{
             this.count =0;
         }
     }
+    isDead(){
+        if(this.hp <= 0){
+            socket.emit('player_dead',{id : this.id});
+            location.reload();
+        }
+    }
 }
 class Enemy{
     constructor(x, y, id, degree, name, hp){
@@ -157,8 +162,9 @@ class Enemy{
     draw(context){
         context.fillStyle="#FF0000";
         context.fillRect(this.x-25,this.y +50,(this.hp/this.maxHp)*50,10);
+        context.font = "20px Georgia";
         context.fillStyle="#21BE16";
-        context.fillText(this.name, this.x -40, this.y  + 38);
+        context.fillText(this.name, this.x-7 , this.y  - 60);
         for(var i=0; i<this.bullets.length; i++){
             this.bullets[i].draw(context);
         }
