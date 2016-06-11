@@ -12,19 +12,21 @@ class Tank{
         this.level = 1; //chưa làm
         this.bulletSpeed = 4; // toc do bay cua dan
         this.hp = 50;
-        this. maxHp = 50;
+        this.maxHp = 50;
         this.reload = 50; // thoi gian delay cua bullet 30x17ms = ..
         this.bullets = new Array();
         this.degree = 0; // goc de xoay
         this.count = 0; // biến đếm số lần lặp của gameLoop để tính time delay đạn
         this.id = id;
+        this.name;
         
     }
     update(){
         this.count ++; // mỗi lần lặp gameLoop tăng biến đếm
         for(var i=0; i< this.bullets.length; i++){
-            if(Math.abs(this.bullets.x - this.x) >=700 || Math.abs(this.bullets.y - this.y)>=500){
-                this.bullets.splice(i,1);
+            if(Math.abs(this.bullets[i].x - this.x) >=1200 || Math.abs(this.bullets[i].y - this.y)>=1200){
+                this.bullets[i].splice(i,1);
+                console.log('xoa dan');
             } else{
                 this.bullets[i].update();
             }
@@ -38,10 +40,12 @@ class Tank{
         }
         //vẽ tank
         //mouseX mouseY là tọa độ của mouse
+        // console.log(this.name);
         context.save();
         context.translate(this.x, this.y);
         context.rotate(this.rotate(mouseX, mouseY));
         context.drawImage(this.sprite, -48, -48);
+        context.fillText(this.name, this.x, this.y  + 80);
         context.restore();
     }
     move(direction){

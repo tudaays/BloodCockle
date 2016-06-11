@@ -3,8 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
+    <script type="text/javascript">
+        $(window).load(function () {
+            $('.myModal').modal('show');
+        });
+    </script>
+
+    <div class="container">
+        <!-- Trigger the modal with a button-->
+        <!--button.btn.btn-info.btn-lg(type='button', data-toggle='modal', data-target='#myModal') Open Modal-->
+        <!--// Modal-->
+        <div role="dialog" class="myModal modal fade">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" data-dismiss="modal" class="close">×</button>
+                        <h4 class="modal-title">Nhap ten</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="txt_name" type="text" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" onclick="login()" class="btn btn-default">Play</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script lang="text/javascript" src="script/game.js"></script>
     <script lang="text/javascript" src="script/socket.io-client/socket.io.js"></script>
     <script lang="text/javascript" src="script/tank.js"></script>

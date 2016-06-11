@@ -19,11 +19,15 @@ window.onload = function () {
     setInterval(gameLoop, 17);
 };
 
-
+function login() {
+    var txtName = document.getElementById("txt_name");
+    console.log(txtName);
+    player = new Tank(Math.floor((Math.random() * 300) + 20), Math.floor((Math.random() * 200)) + 20,0);
+    player.name = txtName;
+}
 
 function initSocketClient() {
     socket = io.connect();
-    player = new Tank(120, 400,0);
     socket.emit('player_created',{x: player.x, y:player.y});
     socket.on('info_other_players',function (data) {
         player.id = data.id;
