@@ -20,8 +20,12 @@ class Tank{
         this.id = id;
         this.name;
         this.bulletDame = 10;
+        this.exp = 0;
     }
     update(){
+        if(this.isLvlUp()){
+            socket.emit('player_lvl_up', {id: this.id, level: this.level});
+        }
         this.isDead();
         this.shootEnemy();
         this.count ++; // mỗi lần lặp gameLoop tăng biến đếm
@@ -40,7 +44,8 @@ class Tank{
         context.fillRect(this.x-25,this.y +50,(this.hp/this.maxHp)*50,10);
         context.font = "20px Georgia";
         context.fillStyle="#21BE16";
-        context.fillText(this.name, this.x-7 , this.y  - 60);
+        var info = this.name + ' ( Level: ' + this.level + ' ) ';
+        context.fillText(info, this.x-40 , this.y  - 60);
         for(var i=0; i< this.bullets.length; i++){
             this.bullets[i].draw(context);
         }
@@ -66,6 +71,7 @@ class Tank{
                 if (this.compare(s1, s2)) {
                     this.bullets.splice(j, 1);
                     enemy[j].hp -= this.bulletDame;
+                    if(enemy[j].hp == 0) this.exp += enemy[i].level*50;
                     socket.emit('enemy_get_shot', {idShooter: this.id, id: enemy[j].id, hp: enemy[j].hp});
                     break;
                 }
@@ -139,6 +145,28 @@ class Tank{
             location.reload();
         }
     }
+    isLvlUp(){
+        if(this.exp == 100){
+            this.level = 2;
+            return true;
+        }
+        if(this.exp == 200){
+            this.level = 3;
+            return true;
+        }
+        if(this.exp == 300){
+            this.level = 4;
+            return true;
+        }
+        if(this.exp == 350){
+            this.level = 5;
+            return true;
+        }
+        if(this.exp == 450){
+            this.level = 6;
+            return true;
+        }
+    }
 }
 class Enemy{
     constructor(x, y, id, degree, name, hp){
@@ -153,6 +181,7 @@ class Enemy{
         this.name = name;
         this.maxHp = 50;
         this.hp = hp;
+        this.level = 1;
     }
     update(){
         for(var i=0; i<this.bullets.length; i++){
@@ -164,7 +193,8 @@ class Enemy{
         context.fillRect(this.x-25,this.y +50,(this.hp/this.maxHp)*50,10);
         context.font = "20px Georgia";
         context.fillStyle="#21BE16";
-        context.fillText(this.name, this.x-7 , this.y  - 60);
+        var info = this.name + ' ( Level: ' + this.level + ' ) ';
+        context.fillText(info, this.x-40 , this.y  - 60);
         for(var i=0; i<this.bullets.length; i++){
             this.bullets[i].draw(context);
         }

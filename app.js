@@ -20,7 +20,7 @@ io.on('connection', function(socket){
         socket.emit('info_other_players',{id:id, tanks:tanks});
         data.id = id;
         socket.broadcast.emit('new_player_connected',data);
-        tanks.push({id:id, x:data.x, y:data.y, name: data.name, hp: data.hp});
+        tanks.push({id:id, x:data.x, y:data.y, name: data.name, hp: data.hp, level:1});
         id++;
     });
     socket.on('player_update', function (data) {
@@ -31,6 +31,7 @@ io.on('connection', function(socket){
                 tanks[i].degree = data.degree;
                 tanks[i].name = data.name;
                 tanks[i].hp = data.hp;
+                tanks[i].level = data.level;
                 socket.broadcast.emit('enemy_update',data);
                 break;
             }
@@ -59,6 +60,15 @@ io.on('connection', function(socket){
             if (tanks[i].id == data.id) {
                 tanks.splice(i, 1);
                 socket.broadcast.emit('enemy_dead',data);
+            }
+        }
+    })
+    socket.on('player_lvl_up', function (data) {
+        for(var i=0; i< tanks.length; i++ ) {
+            if (tanks[i].id == data.id) {
+                tanks[i].level = data.level;
+                socket.broadcast.emit('enemy_lvl_up', data);
+                break;
             }
         }
     })
