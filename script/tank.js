@@ -5,26 +5,34 @@ class Tank{
     constructor(x, y, id){
         this.x = x;
         this.y = y;
+        this.speed = 4;
         this.speedX = 0;
         this.speedY = 0;
         this.sprite = new Image();
         this.sprite.src = 'img/Base_tank.png';
         this.level = 1; //chưa làm
         this.bulletSpeed = 4; // toc do bay cua dan
-        this.hp = 50;
         this.maxHp = 50;
+        this.hp = this.maxHp;
         this.reload = 50; // thoi gian delay cua bullet 30x17ms = ..
         this.bullets = new Array();
         this.degree = 0; // goc de xoay
         this.count = 0; // biến đếm số lần lặp của gameLoop để tính time delay đạn
         this.id = id;
         this.name;
+        this.point = 0;
         this.bulletDame = 10;
         this.exp = 0;
+        this.infoBar = new PointBar();
+        this.isUp = false;
     }
     update(){
-        if(this.isLvlUp()){
+        this.isLvlUp();
+        if(this.isUp){
+            console.log('lvl up');
+            this.point +=1;
             socket.emit('player_lvl_up', {id: this.id, level: this.level});
+            this.isUp = false;
         }
         this.isDead();
         this.shootEnemy();
@@ -40,12 +48,12 @@ class Tank{
         this.y += this.speedY;
     }
     draw(context){
+        this.infoBar.draw(context);
         context.fillStyle="#FF0000";
         context.fillRect(this.x-25,this.y +50,(this.hp/this.maxHp)*50,10);
         context.font = "20px Georgia";
         context.fillStyle="#21BE16";
-        var info = this.name + ' ( Level: ' + this.level + ' ) ';
-        context.fillText(info, this.x-40 , this.y  - 60);
+        context.fillText(this.name, this.x-10 , this.y  - 60);
         for(var i=0; i< this.bullets.length; i++){
             this.bullets[i].draw(context);
         }
@@ -78,29 +86,49 @@ class Tank{
             }
         }
     }
+    powerUp(attribute){
+        switch (attribute){
+            case 1:
+                this.point --;
+                this.speed ++;
+                break;
+            case 2:
+                this.point --;
+                this.bulletDame += 25;
+                break;
+            case 3:
+                this.point --;
+                this.reload -=7;
+                break;
+            case 4:
+                this.point --;
+                this.bulletSpeed ++;
+                break;
+        }
+    }
     move(direction){
         switch (direction){
             case 1://up
                 if(this.y >=10){
-                    this.speedY = -4;
+                    this.speedY = -this.speed;
                     this.speedX = 0;
                 }
                 break;
             case 2://down
                 if(this.y <= window.innerHeight - 10){
-                    this.speedY = 4;
+                    this.speedY = this.speed;
                     this.speedX = 0;
                 }
                 break;
             case 3://left
                 if(this.x >= 10){
-                    this.speedX = -4;
+                    this.speedX = -this.speed;
                     this.speedY = 0;
                 }
                 break;
             case 4://right
                 if (this.x <= window.innerWidth -10){
-                    this.speedX = 4;
+                    this.speedX = this.speed;
                     this.speedY = 0;
                 }
                 break;
@@ -146,25 +174,25 @@ class Tank{
         }
     }
     isLvlUp(){
-        if(this.exp == 100){
+        if(this.exp == 100 && this.level !=2){
+            this.isUp = true;
             this.level = 2;
-            return true;
         }
-        if(this.exp == 200){
+        if(this.exp == 200 && this.level !=3){
+            this.isUp = true;
             this.level = 3;
-            return true;
         }
-        if(this.exp == 300){
+        if(this.exp == 300 && this.level !=4){
+            this.isUp = true;
             this.level = 4;
-            return true;
         }
-        if(this.exp == 350){
+        if(this.exp == 350 && this.level !=5){
+            this.isUp = true;
             this.level = 5;
-            return true;
         }
-        if(this.exp == 450){
+        if(this.exp == 450 && this.level !=6){
+            this.isUp = true;
             this.level = 6;
-            return true;
         }
     }
 }

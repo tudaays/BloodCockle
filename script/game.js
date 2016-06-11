@@ -156,6 +156,18 @@ window.onkeydown = function (e) {
         case 32: // dau cach
             player.shoot();
             break;
+        case 49:
+            player.powerUp(1);
+            break;
+        case 50:
+            player.powerUp(2);
+            break;
+        case 51:
+            player.powerUp(3);
+            break;
+        case 52:
+            player.powerUp(4);
+            break;
     }
 };
 window.onkeyup = function (e) {
