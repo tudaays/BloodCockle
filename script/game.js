@@ -41,7 +41,7 @@ function initSocketClient() {
 
     socket.on('enemy_update',function (data) {
         for(var i = 0; i< enemy.length; i++ ){
-            if(enemy[i].id == data.id){
+            if( enemy[i].id == data.id){
                 enemy[i].x = data.x;
                 enemy[i].y = data.y;
                 enemy[i].degree = data.degree;

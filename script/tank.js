@@ -36,8 +36,9 @@ class Tank{
     draw(context){
         context.fillStyle="#FF0000";
         context.fillRect(this.x-25,this.y +50,(this.hp/this.maxHp)*50,10);
+        context.font = "20px Georgia";
         context.fillStyle="#21BE16";
-        context.fillText(this.name, this.x-7 , this.y  + 80);
+        context.fillText(this.name, this.x-7 , this.y  - 60);
         for(var i=0; i< this.bullets.length; i++){
             this.bullets[i].draw(context);
         }
@@ -49,6 +50,29 @@ class Tank{
         context.drawImage(this.sprite, -48, -48);
         context.restore();
     }
+    compare(s1,s2){
+        if (s1.x < s2.x + s2.width &&
+            s1.x + s1.width > s2.x &&
+            s1.y < s2.y + s2.height &&
+            s1.height + s1.y > s2.y) return true;
+        return false;
+    }
+    // bulletKissBrick(){
+    //     for(var i = 0; i< this.bullets.length; i++){
+    //         var s1 = {x: this.bullets[i].x, y: this.bullets[i].y, width : 50, height: 50}
+    //         for(var j = 0; j< enemy.length; j++){
+    //             var s2 = {x: enemy[j].x, y: enemy[j].y, width : 80, height: 80}
+    //             if (this.compare(s1,s2)) {
+    //                 if(soundEfx.paused){
+    //                     soundEfx.src = 'sound/bullet_shot.ogg';
+    //                     soundEfx.play();
+    //                 }
+    //                 this.bullets.pop();
+    //                 wallBricks.splice(j,1);
+    //                 break;
+    //             }
+    //         }
+    //     }
     move(direction){
         switch (direction){
             case 1://up
