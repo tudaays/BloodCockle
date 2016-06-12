@@ -175,6 +175,9 @@ window.onkeydown = function (e) {
         case 52:
             player.powerUp(4);
             break;
+        case 53:
+            player.powerUp(5);
+            break;
     }
 };
 window.onkeyup = function (e) {

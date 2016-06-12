@@ -15,9 +15,11 @@ class Tank{
         this.maxHp = 50;
         this.hp = this.maxHp;
         this.reload = 50; // thoi gian delay cua bullet 30x17ms = ..
+        this.HpRegen = 200;
         this.bullets = new Array();
         this.degree = 0; // goc de xoay
         this.count = 0; // biến đếm số lần lặp của gameLoop để tính time delay đạn
+        this.countRegen = 0;
         this.id = id;
         this.name;
         this.point = 0;
@@ -27,6 +29,7 @@ class Tank{
         this.isUp = false;
     }
     update(){
+        this.regen();
         this.isLvlUp();
         if(this.isUp){
             console.log('lvl up');
@@ -37,6 +40,7 @@ class Tank{
         this.isDead();
         this.shootEnemy();
         this.count ++; // mỗi lần lặp gameLoop tăng biến đếm
+        this.countRegen ++;
         for(var i=0; i< this.bullets.length; i++){
             if(Math.abs(this.bullets[i].x - this.x) >=1200 || Math.abs(this.bullets[i].y - this.y)>=1200){
                 this.bullets.splice(i,1);
@@ -89,20 +93,34 @@ class Tank{
     powerUp(attribute){
         switch (attribute){
             case 1:
-                this.point --;
-                this.speed ++;
+                if(this.point){
+                    this.point --;
+                    this.speed ++;
+                }
                 break;
             case 2:
-                this.point --;
-                this.bulletDame += 25;
+                if(this.point){
+                    this.point --;
+                    this.bulletDame += 25;
+                }
                 break;
             case 3:
-                this.point --;
-                this.reload -=7;
+                if(this.point){
+                    this.point --;
+                    this.reload -=7;
+                }
                 break;
             case 4:
-                this.point --;
-                this.bulletSpeed ++;
+                if(this.point){
+                    this.point --;
+                    this.bulletSpeed ++;
+                }
+                break;
+            case 5:
+                if(this.point){
+                    this.point --;
+                    this.HpRegen -= 20;
+                }
                 break;
         }
     }
@@ -178,22 +196,14 @@ class Tank{
             this.isUp = true;
             this.level += 1;
         }
-        // if(this.exp == 200 && this.level !=3){
-        //     this.isUp = true;
-        //     this.level = 3;
-        // }
-        // if(this.exp == 300 && this.level !=4){
-        //     this.isUp = true;
-        //     this.level = 4;
-        // }
-        // if(this.exp == 350 && this.level !=5){
-        //     this.isUp = true;
-        //     this.level = 5;
-        // }
-        // if(this.exp == 450 && this.level !=6){
-        //     this.isUp = true;
-        //     this.level = 6;
-        // }
+    }
+    regen(){
+        if(this.countRegen >= this.HpRegen){
+            if(this.hp < this.maxHp){
+                this.hp += 5;
+            }
+            this.countRegen = 0;
+        }
     }
 }
 class Enemy{
