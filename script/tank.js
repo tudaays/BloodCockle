@@ -83,7 +83,7 @@ class Tank{
                 if (this.compare(s1, s2)) {
                     this.bullets.splice(j, 1);
                     enemy[j].hp -= this.bulletDame;
-                    if(enemy[j].hp == 0) this.exp += enemy[i].level*50;
+                    if(enemy[j].hp <= 0) this.exp += enemy[i].level*50;
                     socket.emit('enemy_get_shot', {idShooter: this.id, id: enemy[j].id, hp: enemy[j].hp});
                     break;
                 }
@@ -119,7 +119,7 @@ class Tank{
             case 5:
                 if(this.point){
                     this.point --;
-                    this.HpRegen -= 20;
+                    this.HpRegen -= 40;
                 }
                 break;
         }
