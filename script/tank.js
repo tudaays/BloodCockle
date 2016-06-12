@@ -94,7 +94,7 @@ class Tank{
                 break;
             case 2:
                 this.point --;
-                this.bulletDame += 5;
+                this.bulletDame += 25;
                 break;
             case 3:
                 this.point --;
@@ -174,26 +174,26 @@ class Tank{
         }
     }
     isLvlUp(){
-        if(this.exp == 100 && this.level <2){
+        if(this.exp >= (this.level*100) ){
             this.isUp = true;
-            this.level = 2;
+            this.level += 1;
         }
-        if(this.exp == 200 && this.level <3){
-            this.isUp = true;
-            this.level = 3;
-        }
-        if(this.exp == 300 && this.level <4){
-            this.isUp = true;
-            this.level = 4;
-        }
-        if(this.exp == 350 && this.level <5){
-            this.isUp = true;
-            this.level = 5;
-        }
-        if(this.exp == 450 && this.level <6){
-            this.isUp = true;
-            this.level = 6;
-        }
+        // if(this.exp == 200 && this.level !=3){
+        //     this.isUp = true;
+        //     this.level = 3;
+        // }
+        // if(this.exp == 300 && this.level !=4){
+        //     this.isUp = true;
+        //     this.level = 4;
+        // }
+        // if(this.exp == 350 && this.level !=5){
+        //     this.isUp = true;
+        //     this.level = 5;
+        // }
+        // if(this.exp == 450 && this.level !=6){
+        //     this.isUp = true;
+        //     this.level = 6;
+        // }
     }
 }
 class Enemy{
@@ -210,7 +210,6 @@ class Enemy{
         this.maxHp = 50;
         this.hp = hp;
         this.level = 1;
-        this.exp=0;
     }
     update(){
         for(var i=0; i<this.bullets.length; i++){
