@@ -73,4 +73,12 @@ io.on('connection', function(socket){
             }
         }
     })
+    socket.on('close', function (data) {
+        for(var i=0; i< tanks.length; i++ ) {
+            if (tanks[i].id == data.id) {
+                tanks.splice(i, 1);
+                socket.broadcast.emit('enemy_dead',data);
+            }
+        }
+    })
 });

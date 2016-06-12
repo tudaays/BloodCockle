@@ -6,6 +6,8 @@ var mouseX, mouseY;
 var socket;
 var player;
 var enemy = new Array();
+var view_y = 0;
+var view_x= 0;
 
 window.onload = function () {
     var canvas = document.createElement("canvas");
@@ -14,6 +16,10 @@ window.onload = function () {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.addEventListener("mousemove", mouseMove, false);
+    var view_xview = 0;
+    /* Viewport y position */
+    /* Viewport width */        view_x = canvas.width;
+    /* Viewport height */       view_y = canvas.height;
 };
 
 function login() {
@@ -114,12 +120,14 @@ var gameLoop = function () {
 
 
 
+
 function gameUpdate() {
     player.update();
     socket.emit('player_update',{x: player.x, y: player.y, id: player.id, degree: player.degree, name: player.name, hp: player.hp, level : player.level, exp: player.exp});
     for(var i=0; i< enemy.length; i++){
         enemy[i].update();
     }
+    window.scrollTo(player.x-500, player.y-500);
 }
 function gameDrawer() {
     context.fillStyle = "white";
@@ -127,6 +135,12 @@ function gameDrawer() {
     player.draw(context);
     for(var i=0; i< enemy.length; i++){
         enemy[i].draw(context);
+    }
+    if(player.x > view_x / 2){
+        view_x = player.x - view_x / 2;
+    }
+    if(player.y > view_y / 2){
+        view_y = player.y - view_y / 2;
     }
 }
 
@@ -141,9 +155,6 @@ function mouseMove(e)
         mouseX = e.layerX;
         mouseY = e.layerY;
     }
-
-
-    /* do something with mouseX/mouseY */
 }
 
 window.onkeydown = function (e) {
@@ -178,6 +189,9 @@ window.onkeydown = function (e) {
         case 53:
             player.powerUp(5);
             break;
+        case 54:
+            player.powerUp(6);
+            break;
     }
 };
 window.onkeyup = function (e) {
@@ -203,4 +217,10 @@ window.onkeyup = function (e) {
             }
             break;
     }
+};
+window.onbeforeunload = function (e) {
+    socket.emit('close',{id: player.id});
+};
+window.onunload = function (e) {
+    socket.emit('close',{id: player.id});
 };

@@ -16,6 +16,7 @@ class PointBar{
         var reload = '(3)Reload: ' + player.reload;
         var bulletSpeed = '(4)Bullet Speed: ' + player.bulletSpeed;
         var regen = '(5)HP regen: ' + player.HpRegen;
+        var maxHp = '(6)Max Hp: ' + player.maxHp;
         context.fillText(level , this.x, this.y -20);
         context.fillText(point , this.x, this.y);
         context.fillText(speed, this.x, this.y + 20);
@@ -23,24 +24,31 @@ class PointBar{
         context.fillText(reload, this.x, this.y + 60);
         context.fillText(bulletSpeed, this.x, this.y + 80);
         context.fillText(regen, this.x, this.y + 100);
+        context.fillText(maxHp, this.x, this.y + 120);
         context.fillStyle = "black";
         context.fillText('RANKING', window.innerWidth - 200 , 20);
+
+        var rank = [];
+        for(var i=0; i<enemy.length; i++){
+            rank.push({name: enemy[i].name,exp: enemy[i].exp})
+        }
+        rank.push({name: player.name, exp: player.exp});
+        var max = rank[0];
+        for(var i=0; i<rank.length; i++){
+            if(max < rank[i].exp) {
+                count = i;
+                max = rank[i];
+                break;
+            }
+        }
+        context.fillText(max.name + ': ' + max.exp, window.innerWidth - 200, 40);
+
+
         // var players = enemy;
         // var c = new Enemy(0,0 , player.id, 0, player.name, 0);
         // c.exp = player.exp;
         // players.push(c);
         // var max = players[0];
-        // for(var j=1; j<=5; j++){
-        //     var count =0;
-        //     for(var i=0; i<players; i++){
-        //         if(max < players[i].exp) {
-        //             count = i;
-        //             max = players[i];
-        //             break;
-        //         }
-        //     }
-        //     context.fillText(j +': ' +max.name, window.innerWidth - 200, 20+j*20);
-        //     players.splice(count, 1);
-        // }
+
     }
 }

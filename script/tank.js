@@ -50,6 +50,7 @@ class Tank{
         }
         this.x += this.speedX; //update tank
         this.y += this.speedY;
+
     }
     draw(context){
         this.infoBar.draw(context);
@@ -120,6 +121,12 @@ class Tank{
                 if(this.point){
                     this.point --;
                     this.HpRegen -= 40;
+                }
+                break;
+            case 6:
+                if(this.point){
+                    this.point --;
+                    this.maxHp += 15;
                 }
                 break;
         }
