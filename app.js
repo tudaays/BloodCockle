@@ -50,7 +50,7 @@ io.on('connection', function(socket){
     socket.on('enemy_get_shot', function (data) {
         for(var i=0; i< tanks.length; i++ ) {
             if (tanks[i].id == data.id) {
-                    tanks[i].hp = data.hp
+                tanks[i].hp = data.hp
             }
             socket.broadcast.emit('get_shot', data);
             break;

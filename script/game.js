@@ -6,8 +6,8 @@ var mouseX, mouseY;
 var socket;
 var player;
 var enemy = new Array();
-var view_y = 0;
-var view_x= 0;
+// var view_y = 0;
+// var view_x= 0;
 
 window.onload = function () {
     var canvas = document.createElement("canvas");
@@ -16,18 +16,82 @@ window.onload = function () {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     document.body.addEventListener("mousemove", mouseMove, false);
-    var view_xview = 0;
-    /* Viewport y position */
-    /* Viewport width */        view_x = canvas.width;
-    /* Viewport height */       view_y = canvas.height;
+
 };
 
 function login() {
     var txtName = document.getElementById("txt_name").value;
-    player = new Tank(100,100,0);
+    player = new Tank(Math.random() * (window.innerWidth - 50)  , Math.random() * (window.innerHeight - 50),0);
     player.name = txtName;
     initSocketClient();
     setInterval(gameLoop, 17);
+    window.onkeydown = function (e) {
+        switch (e.keyCode){
+            case 65://a
+                player.move(3);
+                break;
+            case 68://d
+                player.move(4);
+                break;
+            case 83://s
+                player.move(2);
+                break;
+            case 87://w
+                player.move(1);
+                break;
+            case 32: // dau cach
+                player.shoot();
+                break;
+            case 49:
+                player.powerUp(1);
+                break;
+            case 50:
+                player.powerUp(2);
+                break;
+            case 51:
+                player.powerUp(3);
+                break;
+            case 52:
+                player.powerUp(4);
+                break;
+            case 53:
+                player.powerUp(5);
+                break;
+            case 54:
+                player.powerUp(6);
+                break;
+        }
+    };
+    window.onkeyup = function (e) {
+        switch (e.keyCode){
+            case 65://a
+                if(player.speedX < 0){
+                    player.speedX = 0;
+                }
+                break;
+            case 68://d
+                if(player.speedX > 0){
+                    player.speedX = 0;
+                }
+                break;
+            case 83://s
+                if(player.speedY > 0){
+                    player.speedY = 0;
+                }
+                break;
+            case 87://w
+                if(player.speedY < 0){
+                    player.speedY = 0;
+                }
+                break;
+        }
+    };
+    window.onbeforeunload = function (e) {
+        socket.emit('close',{id: player.id});
+    };
+    window.onunload = function (e) {
+        socket.emit('close',{id: player.id});
+    };
 }
 
 function initSocketClient() {
@@ -77,7 +141,7 @@ function initSocketClient() {
             player.hp = data.hp;
             for(var i = 0; i< enemy.length; i++ ) {
                 if (enemy[i].id == data.idShooter) {
-                    enemy[i].bullets.splice( enemy[i].bullets[enemy[i].bullets.length-1],1);
+                    enemy[i].bullets.splice(data.bulletId,1);
                 }
             }
             // break;
@@ -89,7 +153,6 @@ function initSocketClient() {
                 }
             }
         }
-        console.log(data.idShooter);
         for(var i = 0; i< enemy.length; i++ ) {
             if (enemy[i].id == data.idShooter) {
                 enemy[i].bullets.splice( enemy[i].bullets[enemy[i].bullets.length-1],1);
@@ -127,21 +190,20 @@ function gameUpdate() {
     for(var i=0; i< enemy.length; i++){
         enemy[i].update();
     }
-    window.scrollTo(player.x-500, player.y-500);
 }
 function gameDrawer() {
     context.fillStyle = "white";
-    context.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    context.fillRect(0, 0, 5000, 5000);
     player.draw(context);
     for(var i=0; i< enemy.length; i++){
         enemy[i].draw(context);
     }
-    if(player.x > view_x / 2){
-        view_x = player.x - view_x / 2;
-    }
-    if(player.y > view_y / 2){
-        view_y = player.y - view_y / 2;
-    }
+    // if(player.x > view_x / 2){
+    //     view_x = player.x - view_x / 2;
+    // }
+    // if(player.y > view_y / 2){
+    //     view_y = player.y - view_y / 2;
+    // }
 }
 
 function mouseMove(e)
@@ -156,71 +218,3 @@ function mouseMove(e)
         mouseY = e.layerY;
     }
 }
-
-window.onkeydown = function (e) {
-    switch (e.keyCode){
-        case 65://a
-            player.move(3);
-            break;
-        case 68://d
-            player.move(4);
-            break;
-        case 83://s
-            player.move(2);
-            break;
-        case 87://w
-            player.move(1);
-            break;
-        case 32: // dau cach
-            player.shoot();
-            break;
-        case 49:
-            player.powerUp(1);
-            break;
-        case 50:
-            player.powerUp(2);
-            break;
-        case 51:
-            player.powerUp(3);
-            break;
-        case 52:
-            player.powerUp(4);
-            break;
-        case 53:
-            player.powerUp(5);
-            break;
-        case 54:
-            player.powerUp(6);
-            break;
-    }
-};
-window.onkeyup = function (e) {
-    switch (e.keyCode){
-        case 65://a
-            if(player.speedX < 0){
-                player.speedX = 0;
-            }
-            break;
-        case 68://d
-            if(player.speedX > 0){
-                player.speedX = 0;
-            }
-            break;
-        case 83://s
-            if(player.speedY > 0){
-                player.speedY = 0;
-            }
-            break;
-        case 87://w
-            if(player.speedY < 0){
-                player.speedY = 0;
-            }
-            break;
-    }
-};
-window.onbeforeunload = function (e) {
-    socket.emit('close',{id: player.id});
-};
-window.onunload = function (e) {
-    socket.emit('close',{id: player.id});
-};

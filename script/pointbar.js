@@ -8,7 +8,7 @@ class PointBar{
     }
     draw(context){
         context.fillStyle= "black";
-        context.font = "14px Georgia";
+        context.font = "16px Comic Sans MS";
         var level = 'Level: ' + player.level + ' exp:' +player.exp;
         var point =  'Point: ' + player.point;
         var speed = '(1)Speed: ' + player.speed;
@@ -29,26 +29,18 @@ class PointBar{
         context.fillText('RANKING', window.innerWidth - 200 , 20);
 
         var rank = [];
+        rank.push({name: player.name, exp: player.level});
         for(var i=0; i<enemy.length; i++){
-            rank.push({name: enemy[i].name,exp: enemy[i].exp})
+            rank.push({name: enemy[i].name,exp: enemy[i].level })
         }
-        rank.push({name: player.name, exp: player.exp});
         var max = rank[0];
         for(var i=0; i<rank.length; i++){
-            if(max < rank[i].exp) {
+            if(max < rank[i].level) {
                 count = i;
                 max = rank[i];
                 break;
             }
         }
-        context.fillText(max.name + ': ' + max.exp, window.innerWidth - 200, 40);
-
-
-        // var players = enemy;
-        // var c = new Enemy(0,0 , player.id, 0, player.name, 0);
-        // c.exp = player.exp;
-        // players.push(c);
-        // var max = players[0];
-
+        context.fillText(max.name, window.innerWidth - 200, 40);
     }
 }

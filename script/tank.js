@@ -11,7 +11,7 @@ class Tank{
         this.sprite = new Image();
         this.sprite.src = 'img/Base_tank.png';
         this.level = 1; //chưa làm
-        this.bulletSpeed = 4; // toc do bay cua dan
+        this.bulletSpeed = 5; // toc do bay cua dan
         this.maxHp = 50;
         this.hp = this.maxHp;
         this.reload = 50; // thoi gian delay cua bullet 30x17ms = ..
@@ -23,20 +23,14 @@ class Tank{
         this.id = id;
         this.name;
         this.point = 0;
-        this.bulletDame = 10;
+        this.bulletDame = 15;
         this.exp = 0;
         this.infoBar = new PointBar();
-        this.isUp = false;
+        // this.isUp = false;
     }
     update(){
         this.regen();
         this.isLvlUp();
-        if(this.isUp){
-            console.log('lvl up');
-            this.point +=1;
-            socket.emit('player_lvl_up', {id: this.id, level: this.level});
-            this.isUp = false;
-        }
         this.isDead();
         this.shootEnemy();
         this.count ++; // mỗi lần lặp gameLoop tăng biến đếm
@@ -48,26 +42,29 @@ class Tank{
                 this.bullets[i].update();
             }
         }
-        this.x += this.speedX; //update tank
-        this.y += this.speedY;
+
+        if(this.x+ this.speedX >= 30 && this.x+this.speedX <= window.innerWidth - 30 && this.y+ this.speedY >= 30 && this.y+this.speedY <= window.innerHeight - 30 ){
+            this.x += this.speedX; //update tank
+            this.y += this.speedY;
+        }
 
     }
     draw(context){
         this.infoBar.draw(context);
         context.fillStyle="#FF0000";
-        context.fillRect(this.x-25,this.y +50,(this.hp/this.maxHp)*50,10);
-        context.font = "20px Georgia";
-        context.fillStyle="#21BE16";
-        context.fillText(this.name, this.x-10 , this.y  - 60);
+        context.fillRect(this.x-25,this.y +30,(this.hp/this.maxHp)*40,10);
+        context.font = "20px Comic Sans MS";
+        context.fillStyle="blue";
+        context.fillText(this.name, this.x - 28 , this.y  - 40);
         for(var i=0; i< this.bullets.length; i++){
             this.bullets[i].draw(context);
         }
-        //mouseX mouseY là tọa độ của mouse
         context.save();
         context.translate(this.x, this.y);
         context.rotate(this.rotate(mouseX, mouseY));
-        context.drawImage(this.sprite, -48, -48);
+        context.drawImage(this.sprite, -24, -24);
         context.restore();
+        //mouseX mouseY là tọa độ của mouse
     }
     compare(s1,s2){
         if (s1.x < s2.x + s2.width &&
@@ -78,14 +75,14 @@ class Tank{
     }
     shootEnemy() {
         for (var i = 0; i < this.bullets.length; i++) {
-            var s1 = {x: this.bullets[i].x, y: this.bullets[i].y, width: 25, height: 25}
+            var s1 = {x: this.bullets[i].x, y: this.bullets[i].y, width: 15, height: 15}
             for (var j = 0; j < enemy.length; j++) {
-                var s2 = {x: enemy[j].x - 10, y: enemy[j].y - 20, width: 50, height: 50}
+                var s2 = {x: enemy[j].x - 10, y: enemy[j].y - 20, width: 28, height: 28}
                 if (this.compare(s1, s2)) {
-                    this.bullets.splice(j, 1);
+                    this.bullets.splice(i, 1);
                     enemy[j].hp -= this.bulletDame;
-                    if(enemy[j].hp <= 0) this.exp += enemy[i].level*50;
-                    socket.emit('enemy_get_shot', {idShooter: this.id, id: enemy[j].id, hp: enemy[j].hp});
+                    if(enemy[j].hp <= 0) this.exp += enemy[j].level*50;
+                    socket.emit('enemy_get_shot', {idShooter: this.id, id: enemy[j].id, hp: enemy[j].hp, bulletId: i});
                     break;
                 }
             }
@@ -102,13 +99,13 @@ class Tank{
             case 2:
                 if(this.point){
                     this.point --;
-                    this.bulletDame += 25;
+                    this.bulletDame += 2.5;
                 }
                 break;
             case 3:
                 if(this.point){
                     this.point --;
-                    this.reload -=7;
+                    this.reload -=  8;
                 }
                 break;
             case 4:
@@ -119,8 +116,10 @@ class Tank{
                 break;
             case 5:
                 if(this.point){
-                    this.point --;
-                    this.HpRegen -= 40;
+                    if(this.HpRegen >=35) {
+                        this.point--;
+                        this.HpRegen -= 30;
+                    }
                 }
                 break;
             case 6:
@@ -134,28 +133,20 @@ class Tank{
     move(direction){
         switch (direction){
             case 1://up
-                if(this.y >=10){
-                    this.speedY = -this.speed;
-                    this.speedX = 0;
-                }
+                this.speedY = -this.speed;
+                this.speedX = 0;
                 break;
             case 2://down
-                if(this.y <= window.innerHeight - 10){
-                    this.speedY = this.speed;
-                    this.speedX = 0;
-                }
+                this.speedY = this.speed;
+                this.speedX = 0;
                 break;
             case 3://left
-                if(this.x >= 10){
-                    this.speedX = -this.speed;
-                    this.speedY = 0;
-                }
+                this.speedX = -this.speed;
+                this.speedY = 0;
                 break;
-            case 4://right
-                if (this.x <= window.innerWidth -10){
-                    this.speedX = this.speed;
-                    this.speedY = 0;
-                }
+            case 4:
+                this.speedX = this.speed;
+                this.speedY = 0;
                 break;
         }
     }
@@ -186,7 +177,7 @@ class Tank{
     }
     shoot(){
         if(this.count >= this.reload){ //nếu count lớn hơn or bằng time delay mới cho nạp đạn vào. Sau khi nạp đạn thì set count =0
-            var bullet = new Bullet(this.x -20, this.y, mouseX, mouseY, this.bulletSpeed);
+            var bullet = new Bullet(this.x - 12 , this.y +2, mouseX, mouseY, this.bulletSpeed);
             this.bullets.push(bullet);
             socket.emit('player_shoot', {id: this.id, bullets: this.bullets});
             this.count =0;
@@ -199,9 +190,11 @@ class Tank{
         }
     }
     isLvlUp(){
-        if(this.exp >= (this.level*100) ){
-            this.isUp = true;
+        if(this.exp >= (this.level*15 + 100) ){
+            this.exp -= this.level*15 + 100 ;
             this.level += 1;
+            this.point ++;
+            socket.emit('player_lvl_up', {id: this.id, level: this.level});
         }
     }
     regen(){
@@ -213,6 +206,12 @@ class Tank{
         }
     }
 }
+
+
+
+//--------------------------------Enemy-------------------------------------------------------
+
+
 class Enemy{
     constructor(x, y, id, degree, name, hp){
         this.x = x;
@@ -235,18 +234,26 @@ class Enemy{
     }
     draw(context){
         context.fillStyle="#FF0000";
-        context.fillRect(this.x-25,this.y +50,(this.hp/this.maxHp)*50,10);
-        context.font = "20px Georgia";
-        context.fillStyle="#21BE16";
+        context.fillRect(this.x-25,this.y +20,(this.hp/this.maxHp)*40,10);
+        context.font = "20px Comic Sans MS";
+        context.fillStyle="pink";
         var info = this.name + ' ( Level: ' + this.level + ' ) ';
-        context.fillText(info, this.x-40 , this.y  - 60);
+        context.fillText(info, this.x-28 , this.y  - 40);
         for(var i=0; i<this.bullets.length; i++){
             this.bullets[i].draw(context);
         }
         context.save();
         context.translate(this.x, this.y);
         context.rotate(this.degree);
-        context.drawImage(this.sprite, -48, -48);
+        context.drawImage(this.sprite, -24, -24);
         context.restore();
+    }
+
+    compare(s1,s2){
+        if (s1.x < s2.x + s2.width &&
+            s1.x + s1.width > s2.x &&
+            s1.y < s2.y + s2.height &&
+            s1.height + s1.y > s2.y) return true;
+        return false;
     }
 }

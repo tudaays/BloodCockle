@@ -4,38 +4,50 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body style="overflow:hidden">
-    <script type="text/javascript">
-        $(window).load(function () {
-            $('.myModal').modal('show');
-        });
-    </script>
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="padding:35px 50px;">
+                    <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                    <img src="http://techkids.vn/cms/img/TechkidBrandColor.png">
+                </div>
+                <div class="modal-body" style="padding:40px 50px;">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="username"><span class="glyphicon glyphicon-user"></span> Username</label>
+                            <input type="text" class="form-control" id="txt_name" placeholder="Username" required>
+                        </div>
 
-    <div class="container">
-        <!-- Trigger the modal with a button-->
-        <!--button.btn.btn-info.btn-lg(type='button', data-toggle='modal', data-target='#myModal') Open Modal-->
-        <!--// Modal-->
-        <div role="dialog" class="myModal modal fade">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" data-dismiss="modal" class="close">×</button>
-                        <h4 class="modal-title">Nhap ten</h4>
-                    </div>
-                    <div class="modal-body">
-                        <input id="txt_name" type="text" class="form-control">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" onclick="login()" class="btn btn-default">Play</button>
-                    </div>
+                            <div>
+                                <p></p>
+                                <p>How to play :</p>
+                                <p>+> W A S D : Move</p>
+                                <p>+> Space : Shoot</p>
+                                <p>+> Lvl UP: Press 1,2,3,4,5,6 to upgrade ur attribute</p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-success btn-block" data-dismiss="modal" onclick="login();"><span class="glyphicon glyphicon-off"></span> Login</button>
+                    </form>
                 </div>
             </div>
+
         </div>
     </div>
+    </div>
+
+    <script>
+        $(window).load(function () {
+            $(document).ready(function () {
+                $("#myModal").modal();
+            });
+        });
+    </script>
     <script lang="text/javascript" src="script/game.js"></script>
     <script lang="text/javascript" src="script/socket.io-client/socket.io.js"></script>
     <script lang="text/javascript" src="script/pointbar.js"></script>
