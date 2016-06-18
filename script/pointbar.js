@@ -25,22 +25,21 @@ class PointBar{
         context.fillText(bulletSpeed, this.x, this.y + 80);
         context.fillText(regen, this.x, this.y + 100);
         context.fillText(maxHp, this.x, this.y + 120);
-        context.fillStyle = "black";
-        context.fillText('RANKING', window.innerWidth - 200 , 20);
+        context.fillStyle = "red";
+        context.fillText('Best Player', window.innerWidth - 200 , 20);
 
         var rank = [];
-        rank.push({name: player.name, exp: player.level});
+        rank.push({name: player.name, level: player.level,  exp: player.exp});
         for(var i=0; i<enemy.length; i++){
-            rank.push({name: enemy[i].name,exp: enemy[i].level })
+            rank.push({name: enemy[i].name, level: enemy[i].level, exp: enemy[i].exp })
         }
         var max = rank[0];
         for(var i=0; i<rank.length; i++){
-            if(max < rank[i].level) {
-                count = i;
+            if(max.level*15 + 100 + max.exp < rank[i].level*15 + 100 + rank[i].exp) {
                 max = rank[i];
                 break;
             }
         }
-        context.fillText(max.name, window.innerWidth - 200, 40);
+        context.fillText(max.name + ' : point ' + (max.level*15 + max.level*100 - 100 - 15 + max.exp) , window.innerWidth - 200, 40);
     }
 }

@@ -92,26 +92,34 @@ class Tank{
         switch (attribute){
             case 1:
                 if(this.point){
-                    this.point --;
-                    this.speed ++;
+                    if(this.speed <=10){
+                        this.point --;
+                        this.speed ++;
+                    }
                 }
                 break;
             case 2:
                 if(this.point){
-                    this.point --;
-                    this.bulletDame += 2.5;
+                    if(this.bulletDame <= 40){
+                        this.point --;
+                        this.bulletDame += 4;
+                    }
                 }
                 break;
             case 3:
                 if(this.point){
-                    this.point --;
-                    this.reload -=  8;
+                    if(this.reload >= 20){
+                        this.point --;
+                        this.reload -=  8;
+                    }
                 }
                 break;
             case 4:
                 if(this.point){
-                    this.point --;
-                    this.bulletSpeed ++;
+                    if(this.bulletSpeed <=10){
+                        this.point --;
+                        this.bulletSpeed ++;
+                    }
                 }
                 break;
             case 5:
@@ -124,8 +132,10 @@ class Tank{
                 break;
             case 6:
                 if(this.point){
-                    this.point --;
-                    this.maxHp += 15;
+                    if(this.maxHp <=125){
+                        this.point --;
+                        this.maxHp += 15;
+                    }
                 }
                 break;
         }
