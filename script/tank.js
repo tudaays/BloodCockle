@@ -144,19 +144,19 @@ class Tank{
         switch (direction){
             case 1://up
                 this.speedY = -this.speed;
-                this.speedX = 0;
+                // this.speedX = 0;
                 break;
             case 2://down
                 this.speedY = this.speed;
-                this.speedX = 0;
+                // this.speedX = 0;
                 break;
             case 3://left
                 this.speedX = -this.speed;
-                this.speedY = 0;
+                // this.speedY = 0;
                 break;
             case 4:
                 this.speedX = this.speed;
-                this.speedY = 0;
+                    // this.speedY = 0;
                 break;
         }
     }
