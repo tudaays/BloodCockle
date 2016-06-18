@@ -8,9 +8,10 @@ var player;
 var enemy = new Array();
 // var view_y = 0;
 // var view_x= 0;
+var canvas;
 
 window.onload = function () {
-    var canvas = document.createElement("canvas");
+    canvas = document.createElement("canvas");
     document.body.appendChild(canvas);
     context = canvas.getContext("2d");
     canvas.width = window.innerWidth;
@@ -62,6 +63,9 @@ function login() {
                 break;
         }
     };
+    canvas.onClick = function () {
+        player.shoot();
+    }
     window.onkeyup = function (e) {
         switch (e.keyCode){
             case 65://a
@@ -189,6 +193,11 @@ function gameUpdate() {
     socket.emit('player_update',{x: player.x, y: player.y, id: player.id, degree: player.degree, name: player.name, hp: player.hp, level : player.level, exp: player.exp});
     for(var i=0; i< enemy.length; i++){
         enemy[i].update();
+    }
+    for(var i=0; i< enemy.length; i++){
+        if(enemy[i].hp<=0){
+            enemy.splice(i,1);
+        }
     }
 }
 function gameDrawer() {
